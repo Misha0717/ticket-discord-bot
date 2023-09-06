@@ -30,6 +30,12 @@ discordbot.on("ready", (client) => {
     LoadDiscordEvents()
 
     console.log(`[Info] ${client.user.username} started up succesfully!`)
+
+    setTimeout(() => {
+        const { CreateTicketMessage } = require("./functions/createticketmessage.js")
+
+        CreateTicketMessage(client)
+    }, 2000);
 })
 
 discordbot.login(process.env.TOKEN)
