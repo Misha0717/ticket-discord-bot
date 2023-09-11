@@ -8,11 +8,9 @@ module.exports = {
 
         } else {
             if (interaction.customId == "create-ticket") {
-                console.log("creating ticket...")
-                let CreatedTicket = false
-
+                let randomNumber = Math.floor(Math.random() * 10)
                 const modal = new ModalBuilder({
-                    customId: `ticket-modal-${interaction.user.id}`,
+                    customId: `ticket-modal-${interaction.user.id}-${randomNumber}`,
                     title: "Title"
                 })
 
@@ -35,15 +33,10 @@ module.exports = {
                 modal.addComponents(Title, Description)
                 await interaction.showModal(modal)
 
-                const filter = (interaction) => interaction.customId === `ticket-modal-${interaction.user.id}`
-                interaction
+                const filter = (interaction) => interaction.customId === `ticket-modal-${interaction.user.id}-${randomNumber}`
+                await interaction
                     .awaitModalSubmit({ filter, time:30000_000 })
                     .then(async (modalInteraction) => {
-
-                        if (CreatedTicket) {
-                            return
-                        }
-
                         const CreateTicket = await modalInteraction.guild.channels.create({
                             name: "test",
                             type: ChannelType.GuildText,
@@ -57,16 +50,14 @@ module.exports = {
                         }).then(async createdTicketChannel => {
 
                             if (modalInteraction) {
-                                CreatedTicket = true
                                 modalInteraction.reply({ content: `You have succesfully created ticket: <#${createdTicketChannel.id}>`, ephemeral: true })
                             }
                         })
                     })
+                    .catch(error => {
+                        console.log("received error: ", error)
+                    })
             }
         }
     }
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
 }
