@@ -1,4 +1,5 @@
 const { ActionRowBuilder, ChannelType, ModalBuilder, PermissionsBitField, TextInputBuilder, TextInputStyle } = require("discord.js")
+const config = require("../config.js")
 
 module.exports = {
     name: "interactionCreate",
@@ -45,6 +46,14 @@ module.exports = {
                                 {
                                     id: modalInteraction.guild.id,
                                     deny: [PermissionsBitField.Flags.ViewChannel],
+                                },
+                                {
+                                    id: modalInteraction.interaction.id,
+                                    allow: [PermissionsBitField.Flags.ViewChannel],
+                                },
+                                {
+                                    id: config.roles.TicketRole,
+                                    allow: [PermissionsBitField.Flags.ViewChannel],
                                 },
                             ]
                         }).then(async createdTicketChannel => {
